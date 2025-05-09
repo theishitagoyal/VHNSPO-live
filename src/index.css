@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: 59, 130, 246; /* #3B82F6 */
+  --color-secondary: 107, 114, 128; /* #6B7280 */
+  --color-accent: 20, 184, 166; /* #14B8A6 */
+  --color-success: 16, 185, 129; /* #10B981 */
+  --color-warning: 245, 158, 11; /* #F59E0B */
+  --color-error: 239, 68, 68; /* #EF4444 */
+  --color-background: 15, 23, 42; /* #0F172A */
+  --color-foreground: 30, 41, 59; /* #1E293B */
+  --color-card: 51, 65, 85; /* #334155 */
+  --color-text: 248, 250, 252; /* #F8FAFC */
+}
+
+body {
+  @apply bg-slate-900 text-slate-100 font-sans antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-600 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-500;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Charts */
+.chart-container {
+  @apply w-full h-full min-h-[200px] transition-all duration-300;
+}
+
+/* Status indicators */
+.status-indicator {
+  @apply inline-block h-2.5 w-2.5 rounded-full;
+}
+
+.status-indicator.online {
+  @apply bg-green-500;
+}
+
+.status-indicator.offline {
+  @apply bg-red-500;
+}
+
+.status-indicator.warning {
+  @apply bg-amber-500;
+}
+
+/* Card styles */
+.card {
+  @apply bg-slate-800 rounded-lg shadow-md p-4 border border-slate-700;
+}
+
+/* Table styles */
+.table-container {
+  @apply w-full overflow-x-auto;
+}
+
+.data-table {
+  @apply min-w-full table-auto;
+}
+
+.data-table th {
+  @apply bg-slate-700 text-left py-3 px-4 font-medium text-slate-200;
+}
+
+.data-table tr {
+  @apply border-b border-slate-700;
+}
+
+.data-table td {
+  @apply py-3 px-4 text-sm text-slate-300;
+}
+
+.data-table tbody tr:hover {
+  @apply bg-slate-700/50;
+}
+
+/* Button styles */
+.btn {
+  @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white;
+}
+
+.btn-warning {
+  @apply bg-amber-600 hover:bg-amber-700 text-white;
+}
+
+/* Alert styles */
+.alert {
+  @apply p-4 rounded-md mb-4;
+}
+
+.alert-danger {
+  @apply bg-red-500/20 text-red-200 border border-red-500/30;
+}
+
+.alert-warning {
+  @apply bg-amber-500/20 text-amber-200 border border-amber-500/30;
+}
+
+.alert-info {
+  @apply bg-blue-500/20 text-blue-200 border border-blue-500/30;
+}
+
+.alert-success {
+  @apply bg-green-500/20 text-green-200 border border-green-500/30;
+}
