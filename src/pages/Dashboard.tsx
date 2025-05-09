@@ -86,7 +86,8 @@ const Dashboard: React.FC = () => {
   // Chart options
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
+    aspectRatio: 2,
     plugins: {
       legend: {
         display: true,
@@ -95,7 +96,7 @@ const Dashboard: React.FC = () => {
         },
       },
       tooltip: {
-        mode: 'index',
+        mode: 'index' as const,
         intersect: false,
       },
     },
@@ -103,6 +104,8 @@ const Dashboard: React.FC = () => {
       x: {
         ticks: {
           color: 'rgba(255, 255, 255, 0.7)',
+          maxRotation: 45,
+          minRotation: 45
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
@@ -188,14 +191,14 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h2 className="text-lg font-semibold mb-4">Traffic by Protocol</h2>
-          <div className="chart-container h-64">
+          <div className="h-[300px]">
             <Bar data={protocolChartData} options={chartOptions} />
           </div>
         </div>
         
         <div className="card">
           <h2 className="text-lg font-semibold mb-4">Traffic Volume Over Time</h2>
-          <div className="chart-container h-64">
+          <div className="h-[300px]">
             <Line data={timeChartData} options={chartOptions} />
           </div>
         </div>
