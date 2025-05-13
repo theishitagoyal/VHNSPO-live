@@ -18,28 +18,32 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // In a real environment, this would connect to a real WebSocket server
-    // For now, we'll mock the socket communication
-    const mockSocket = io();
+    // Connect to the Socket.IO server
+    const socket = io('http://localhost:5001', {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
     
-    const mockConnect = () => {
-      setIsConnected(true);
+    socket.on('connect', () => {
       console.log('Socket connected');
-    };
+      setIsConnected(true);
+    });
     
-    const mockDisconnect = () => {
-      setIsConnected(false);
+    socket.on('disconnect', () => {
       console.log('Socket disconnected');
-    };
+      setIsConnected(false);
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      setIsConnected(false);
+    });
     
-    // Mock connection events
-    setTimeout(mockConnect, 1000);
-    
-    setSocket(mockSocket);
+    setSocket(socket);
     
     return () => {
-      mockDisconnect();
-      mockSocket.disconnect();
+      socket.disconnect();
     };
   }, []);
 

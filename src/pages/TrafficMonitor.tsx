@@ -9,9 +9,34 @@ import {
   Download,
   Upload
 } from 'lucide-react';
+import { Line, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import PacketCapture from '../components/PacketCapture';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const TrafficMonitor: React.FC = () => {
-  const { packets } = useNetworkData();
+  const { packets, trafficByProtocol, trafficByTime } = useNetworkData();
   
   const [filters, setFilters] = useState({
     protocol: '',
@@ -57,6 +82,68 @@ const TrafficMonitor: React.FC = () => {
   // Get unique protocols for filter
   const protocols = Array.from(new Set(packets.map(packet => packet.protocol)));
 
+  // Prepare traffic by protocol chart data
+  const protocolChartData = {
+    labels: Object.keys(trafficByProtocol || {}),
+    datasets: [
+      {
+        label: 'Traffic Volume',
+        data: Object.values(trafficByProtocol || {}),
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+        ],
+        borderColor: [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Prepare traffic by time chart data
+  const timeChartData = {
+    labels: (trafficByTime || []).map(entry => {
+      const date = new Date(entry.timestamp);
+      return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    }),
+    datasets: [
+      {
+        label: 'Traffic Volume',
+        data: (trafficByTime || []).map(entry => entry.value),
+        fill: true,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -73,6 +160,26 @@ const TrafficMonitor: React.FC = () => {
           <div className="flex items-center gap-1 text-slate-400 text-sm">
             <Network className="h-4 w-4" />
             <span>{packets.length} packets</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Real-time Packet Capture */}
+      <PacketCapture />
+      
+      {/* Traffic Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="card">
+          <h2 className="text-lg font-semibold mb-4">Traffic by Protocol</h2>
+          <div className="h-[300px]">
+            <Bar data={protocolChartData} options={chartOptions} />
+          </div>
+        </div>
+        
+        <div className="card">
+          <h2 className="text-lg font-semibold mb-4">Traffic Over Time</h2>
+          <div className="h-[300px]">
+            <Line data={timeChartData} options={chartOptions} />
           </div>
         </div>
       </div>

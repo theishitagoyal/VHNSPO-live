@@ -6,6 +6,9 @@ const BandwidthOptimizer: React.FC = () => {
   const { bandwidthAllocation, optimizeBandwidth } = useNetworkData();
   const [optimizationInProgress, setOptimizationInProgress] = useState(false);
   
+  // Debug log for bandwidthAllocation
+  console.log('Bandwidth Allocation:', bandwidthAllocation);
+  
   const handleOptimize = () => {
     setOptimizationInProgress(true);
     setTimeout(() => {
@@ -15,17 +18,53 @@ const BandwidthOptimizer: React.FC = () => {
   };
   
   const getTotalUsage = () => {
-    return bandwidthAllocation.reduce((sum, device) => sum + device.usage, 0) / bandwidthAllocation.length;
+    // Check if bandwidthAllocation exists and has items
+    if (!bandwidthAllocation || bandwidthAllocation.length === 0) {
+      console.log('getTotalUsage: No bandwidth data available');
+      return 0;
+    }
+    
+    const total = bandwidthAllocation.reduce((sum, device) => {
+      console.log('Usage for device:', device.device, device.usage);
+      return sum + (device.usage || 0);
+    }, 0) / bandwidthAllocation.length;
+    
+    console.log('Total Usage:', total);
+    return total;
   };
   
   const getTotalAllocation = () => {
-    return bandwidthAllocation.reduce((sum, device) => sum + device.allocation, 0) / bandwidthAllocation.length;
+    // Check if bandwidthAllocation exists and has items
+    if (!bandwidthAllocation || bandwidthAllocation.length === 0) {
+      console.log('getTotalAllocation: No bandwidth data available');
+      return 0;
+    }
+    
+    const total = bandwidthAllocation.reduce((sum, device) => {
+      console.log('Allocation for device:', device.device, device.allocation);
+      return sum + (device.allocation || 0);
+    }, 0) / bandwidthAllocation.length;
+    
+    console.log('Total Allocation:', total);
+    return total;
   };
   
   const getEfficiencyGain = () => {
     const beforeOptimization = getTotalUsage();
     const afterOptimization = getTotalAllocation();
-    return ((afterOptimization - beforeOptimization) / beforeOptimization * 100).toFixed(2);
+    
+    console.log('Efficiency calculation - Before:', beforeOptimization, 'After:', afterOptimization);
+    
+    // Prevent division by zero or NaN
+    if (!beforeOptimization || beforeOptimization === 0) {
+      const result = afterOptimization > 0 ? '100.00' : '0.00';
+      console.log('Efficiency result (zero division case):', result);
+      return result;
+    }
+    
+    const result = ((afterOptimization - beforeOptimization) / beforeOptimization * 100).toFixed(2);
+    console.log('Efficiency result:', result);
+    return result;
   };
   
   return (

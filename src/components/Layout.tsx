@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', path: '/', icon: <LayoutDashboard className="w-5 h-5" /> },
     { name: 'Traffic Monitor', path: '/traffic', icon: <Activity className="w-5 h-5" /> },
     { name: 'Anomaly Detection', path: '/anomalies', icon: <AlertTriangle className="w-5 h-5" /> },
-    /*{ name: 'Bandwidth Optimizer', path: '/optimize', icon: <Sliders className="w-5 h-5" /> },*/
+    { name: 'Bandwidth Optimizer', path: '/optimize', icon: <Sliders className="w-5 h-5" /> },
     /*{ name: 'Settings', path: '/settings', icon: <Settings className="w-5 h-5" /> },*/
   ];
 
